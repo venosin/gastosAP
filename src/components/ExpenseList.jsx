@@ -33,18 +33,28 @@ import {
   TrendingUp as TrendingUpIcon,
   TrendingDown as TrendingDownIcon,
 } from '@mui/icons-material';
+import {
+  UtensilsCrossed,
+  Car,
+  Gamepad2,
+  Heart,
+  GraduationCap,
+  ShoppingBag,
+  Wrench,
+  Package,
+} from 'lucide-react';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 
 const categories = {
-  alimentacion: { name: 'Alimentación', color: '#e74c3c', icon: '🍽️' },
-  transporte: { name: 'Transporte', color: '#3498db', icon: '🚗' },
-  entretenimiento: { name: 'Entretenimiento', color: '#9b59b6', icon: '🎬' },
-  salud: { name: 'Salud', color: '#27ae60', icon: '🏥' },
-  educacion: { name: 'Educación', color: '#f39c12', icon: '📚' },
-  compras: { name: 'Compras', color: '#e67e22', icon: '🛍️' },
-  servicios: { name: 'Servicios', color: '#34495e', icon: '🔧' },
-  otros: { name: 'Otros', color: '#95a5a6', icon: '📦' },
+  alimentacion: { name: 'Alimentación', color: '#e74c3c', Icon: UtensilsCrossed },
+  transporte: { name: 'Transporte', color: '#3498db', Icon: Car },
+  entretenimiento: { name: 'Entretenimiento', color: '#9b59b6', Icon: Gamepad2 },
+  salud: { name: 'Salud', color: '#27ae60', Icon: Heart },
+  educacion: { name: 'Educación', color: '#f39c12', Icon: GraduationCap },
+  compras: { name: 'Compras', color: '#e67e22', Icon: ShoppingBag },
+  servicios: { name: 'Servicios', color: '#34495e', Icon: Wrench },
+  otros: { name: 'Otros', color: '#95a5a6', Icon: Package },
 };
 
 const ExpenseList = ({ expenses = [], onEdit, onDelete, loading = false }) => {
@@ -110,9 +120,9 @@ const ExpenseList = ({ expenses = [], onEdit, onDelete, loading = false }) => {
     });
 
   const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('es-ES', {
+    return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'EUR',
+      currency: 'USD',
     }).format(amount);
   };
 
@@ -165,14 +175,17 @@ const ExpenseList = ({ expenses = [], onEdit, onDelete, loading = false }) => {
                 }
               >
                 <MenuItem value="">Todas las categorías</MenuItem>
-                {Object.entries(categories).map(([key, category]) => (
-                  <MenuItem key={key} value={key}>
-                    <Box display="flex" alignItems="center" gap={1}>
-                      <span>{category.icon}</span>
-                      {category.name}
-                    </Box>
-                  </MenuItem>
-                ))}
+                {Object.entries(categories).map(([key, category]) => {
+                  const Icon = category.Icon;
+                  return (
+                    <MenuItem key={key} value={key}>
+                      <Box display="flex" alignItems="center" gap={1}>
+                        <Icon size={18} color={category.color} />
+                        {category.name}
+                      </Box>
+                    </MenuItem>
+                  );
+                })}
               </Select>
             </FormControl>
           </Grid>
@@ -226,10 +239,10 @@ const ExpenseList = ({ expenses = [], onEdit, onDelete, loading = false }) => {
       {filteredAndSortedExpenses.length === 0 ? (
         <Card sx={{ p: 4, textAlign: 'center' }}>
           <Typography variant="h6" color="text.secondary" gutterBottom>
-            📊 No se encontraron gastos
+            No se encontraron gastos
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            {searchTerm || filterCategory 
+            {searchTerm || filterCategory
               ? 'Intenta cambiar los filtros de búsqueda'
               : 'Comienza agregando tu primer gasto'
             }
@@ -239,11 +252,12 @@ const ExpenseList = ({ expenses = [], onEdit, onDelete, loading = false }) => {
         <Stack spacing={2}>
           {filteredAndSortedExpenses.map((expense) => {
             const category = categories[expense.category] || categories.otros;
-            
+            const CategoryIcon = category.Icon;
+
             return (
-              <Card 
+              <Card
                 key={expense.id}
-                sx={{ 
+                sx={{
                   transition: 'all 0.2s ease-in-out',
                   '&:hover': {
                     transform: 'translateY(-2px)',
@@ -258,13 +272,14 @@ const ExpenseList = ({ expenses = [], onEdit, onDelete, loading = false }) => {
                       <Avatar
                         sx={{
                           backgroundColor: category.color + '20',
-                          color: category.color,
                           width: isMobile ? 40 : 48,
                           height: isMobile ? 40 : 48,
-                          fontSize: isMobile ? '1.2em' : '1.5em',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
                         }}
                       >
-                        {category.icon}
+                        <CategoryIcon size={isMobile ? 20 : 24} color={category.color} />
                       </Avatar>
                     </Grid>
 

@@ -15,18 +15,16 @@ import {
   useTheme,
   LinearProgress
 } from '@mui/material';
-import { 
+import {
   Google as GoogleIcon,
   AccountBalance as AccountBalanceIcon,
   Visibility,
   VisibilityOff,
-  DarkMode,
-  LightMode,
   CheckCircle,
-  Cancel
+  Cancel,
+  PersonAdd as PersonAddIcon,
 } from '@mui/icons-material';
 import { useAuth } from '../hooks/useAuth.jsx';
-import { useTheme as useCustomTheme } from '../hooks/useTheme.jsx';
 
 const RegisterPage = () => {
   const [email, setEmail] = useState('');
@@ -36,9 +34,8 @@ const RegisterPage = () => {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  
+
   const { register, loginWithGoogle } = useAuth();
-  const { isDarkMode, toggleTheme } = useCustomTheme();
   const theme = useTheme();
   const navigate = useNavigate();
 
@@ -103,37 +100,61 @@ const RegisterPage = () => {
     <Box
       sx={{
         minHeight: '100vh',
-        background: isDarkMode 
-          ? 'linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%)'
-          : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        width: '100vw',
+        background: 'linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: 2,
+        position: 'relative',
+        overflow: 'hidden',
+        '&::before': {
+          content: '""',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'radial-gradient(circle at 20% 50%, rgba(108, 47, 255, 0.1) 0%, transparent 50%)',
+        },
+        '&::after': {
+          content: '""',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'radial-gradient(circle at 80% 80%, rgba(0, 184, 255, 0.1) 0%, transparent 50%)',
+        },
       }}
     >
-      <Container maxWidth="sm">
+      <Box
+        sx={{
+          position: 'relative',
+          zIndex: 1,
+          width: '100%',
+          maxWidth: 500,
+          px: 2,
+        }}
+      >
         <Slide direction="up" in={true} mountOnEnter unmountOnExit>
-          <Paper 
-            elevation={24} 
-            sx={{ 
-              padding: 4, 
-              width: '100%',
-              background: theme.palette.background.paper,
+          <Paper
+            elevation={24}
+            sx={{
+              padding: 4,
+              background: 'rgba(18, 23, 46, 0.8)',
               backdropFilter: 'blur(20px)',
-              border: `1px solid ${theme.palette.divider}`,
+              border: `1px solid rgba(108, 47, 255, 0.2)`,
+              borderRadius: 4,
+              boxShadow: '0 8px 32px rgba(108, 47, 255, 0.2)',
             }}
           >
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', mb: 3 }}>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                 <AccountBalanceIcon color="primary" sx={{ fontSize: 40 }} />
                 <Typography variant="h4" component="h1" fontWeight="bold">
                   FinanzasAP
                 </Typography>
               </Box>
-              <IconButton onClick={toggleTheme} color="primary">
-                {isDarkMode ? <LightMode /> : <DarkMode />}
-              </IconButton>
             </Box>
 
             <Typography variant="h5" align="center" gutterBottom color="text.secondary">
@@ -257,15 +278,12 @@ const RegisterPage = () => {
                 fullWidth
                 variant="contained"
                 size="large"
+                startIcon={<PersonAddIcon />}
                 disabled={loading || !passwordValidations.length || !passwordValidations.match}
-                sx={{ 
+                sx={{
                   mb: 2,
                   py: 1.5,
                   fontSize: '1.1rem',
-                  background: 'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)',
-                  '&:hover': {
-                    background: 'linear-gradient(45deg, #1976D2 30%, #1CB5E0 90%)',
-                  }
                 }}
               >
                 {loading ? 'Creando cuenta...' : 'Crear Cuenta'}
@@ -306,7 +324,7 @@ const RegisterPage = () => {
             </Box>
           </Paper>
         </Slide>
-      </Container>
+      </Box>
     </Box>
   );
 };

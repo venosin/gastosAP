@@ -18,25 +18,33 @@ import {
   InputAdornment,
 } from '@mui/material';
 import {
-  Close as CloseIcon,
-  AttachMoney as MoneyIcon,
-  Category as CategoryIcon,
-  Description as DescriptionIcon,
-  CalendarToday as CalendarIcon,
-} from '@mui/icons-material';
+  X as CloseIcon,
+  DollarSign as MoneyIcon,
+  Tag as CategoryIcon,
+  FileText as DescriptionIcon,
+  Calendar as CalendarIcon,
+  UtensilsCrossed,
+  Car,
+  Gamepad2,
+  Heart,
+  GraduationCap,
+  ShoppingBag,
+  Wrench,
+  Package,
+} from 'lucide-react';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 const categories = [
-  { id: 'alimentacion', name: 'Alimentación', color: '#e74c3c', icon: '🍽️' },
-  { id: 'transporte', name: 'Transporte', color: '#3498db', icon: '🚗' },
-  { id: 'entretenimiento', name: 'Entretenimiento', color: '#9b59b6', icon: '🎬' },
-  { id: 'salud', name: 'Salud', color: '#27ae60', icon: '🏥' },
-  { id: 'educacion', name: 'Educación', color: '#f39c12', icon: '📚' },
-  { id: 'compras', name: 'Compras', color: '#e67e22', icon: '🛍️' },
-  { id: 'servicios', name: 'Servicios', color: '#34495e', icon: '🔧' },
-  { id: 'otros', name: 'Otros', color: '#95a5a6', icon: '📦' },
+  { id: 'alimentacion', name: 'Alimentación', color: '#e74c3c', Icon: UtensilsCrossed },
+  { id: 'transporte', name: 'Transporte', color: '#3498db', Icon: Car },
+  { id: 'entretenimiento', name: 'Entretenimiento', color: '#9b59b6', Icon: Gamepad2 },
+  { id: 'salud', name: 'Salud', color: '#27ae60', Icon: Heart },
+  { id: 'educacion', name: 'Educación', color: '#f39c12', Icon: GraduationCap },
+  { id: 'compras', name: 'Compras', color: '#e67e22', Icon: ShoppingBag },
+  { id: 'servicios', name: 'Servicios', color: '#34495e', Icon: Wrench },
+  { id: 'otros', name: 'Otros', color: '#95a5a6', Icon: Package },
 ];
 
 const ExpenseForm = ({ open, onClose, onSubmit, expense = null, mode = 'create' }) => {
@@ -140,11 +148,26 @@ const ExpenseForm = ({ open, onClose, onSubmit, expense = null, mode = 'create' 
       >
         <DialogTitle sx={{ pb: 1 }}>
           <Box display="flex" alignItems="center" justifyContent="space-between">
-            <Typography variant="h5" component="div" fontWeight={600}>
-              {mode === 'create' ? '💰 Nuevo Gasto' : '✏️ Editar Gasto'}
-            </Typography>
+            <Box display="flex" alignItems="center" gap={1.5}>
+              <Box
+                sx={{
+                  width: 40,
+                  height: 40,
+                  borderRadius: 2,
+                  background: 'linear-gradient(135deg, #2196F3, #21CBF3)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <MoneyIcon size={22} color="white" />
+              </Box>
+              <Typography variant="h5" component="div" fontWeight={600}>
+                {mode === 'create' ? 'Nuevo Gasto' : 'Editar Gasto'}
+              </Typography>
+            </Box>
             <IconButton onClick={onClose} size="small">
-              <CloseIcon />
+              <CloseIcon size={20} />
             </IconButton>
           </Box>
         </DialogTitle>
@@ -164,7 +187,7 @@ const ExpenseForm = ({ open, onClose, onSubmit, expense = null, mode = 'create' 
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
-                      <MoneyIcon color="primary" />
+                      <MoneyIcon size={20} color="#2196F3" />
                     </InputAdornment>
                   ),
                 }}
@@ -181,22 +204,20 @@ const ExpenseForm = ({ open, onClose, onSubmit, expense = null, mode = 'create' 
                 label="Fecha"
                 value={formData.date}
                 onChange={handleDateChange}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    fullWidth
-                    error={!!errors.date}
-                    helperText={errors.date}
-                    InputProps={{
-                      ...params.InputProps,
+                slotProps={{
+                  textField: {
+                    fullWidth: true,
+                    error: !!errors.date,
+                    helperText: errors.date,
+                    InputProps: {
                       startAdornment: (
                         <InputAdornment position="start">
-                          <CalendarIcon color="primary" />
+                          <CalendarIcon size={20} color="#2196F3" />
                         </InputAdornment>
                       ),
-                    }}
-                  />
-                )}
+                    },
+                  },
+                }}
               />
             </Grid>
 
@@ -212,7 +233,7 @@ const ExpenseForm = ({ open, onClose, onSubmit, expense = null, mode = 'create' 
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
-                      <DescriptionIcon color="primary" />
+                      <DescriptionIcon size={20} color="#2196F3" />
                     </InputAdornment>
                   ),
                 }}
@@ -229,29 +250,44 @@ const ExpenseForm = ({ open, onClose, onSubmit, expense = null, mode = 'create' 
                   label="Categoría"
                   startAdornment={
                     <InputAdornment position="start">
-                      <CategoryIcon color="primary" />
+                      <CategoryIcon size={20} color="#2196F3" />
                     </InputAdornment>
                   }
                 >
-                  {categories.map((category) => (
-                    <MenuItem key={category.id} value={category.id}>
-                      <Box display="flex" alignItems="center" gap={1}>
-                        <span style={{ fontSize: '1.2em' }}>{category.icon}</span>
-                        <Typography>{category.name}</Typography>
-                        <Chip
-                          size="small"
-                          sx={{
-                            backgroundColor: category.color,
-                            color: 'white',
-                            ml: 'auto',
-                            minWidth: 20,
-                            height: 20,
-                          }}
-                          label=""
-                        />
-                      </Box>
-                    </MenuItem>
-                  ))}
+                  {categories.map((category) => {
+                    const Icon = category.Icon;
+                    return (
+                      <MenuItem key={category.id} value={category.id}>
+                        <Box display="flex" alignItems="center" gap={1.5}>
+                          <Box
+                            sx={{
+                              width: 32,
+                              height: 32,
+                              borderRadius: 1.5,
+                              backgroundColor: category.color + '20',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                            }}
+                          >
+                            <Icon size={18} color={category.color} />
+                          </Box>
+                          <Typography>{category.name}</Typography>
+                          <Chip
+                            size="small"
+                            sx={{
+                              backgroundColor: category.color,
+                              color: 'white',
+                              ml: 'auto',
+                              minWidth: 20,
+                              height: 20,
+                            }}
+                            label=""
+                          />
+                        </Box>
+                      </MenuItem>
+                    );
+                  })}
                 </Select>
                 {errors.category && (
                   <Typography variant="caption" color="error" sx={{ mt: 0.5, ml: 1.75 }}>

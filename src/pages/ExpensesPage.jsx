@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import {
   Box,
   Container,
@@ -16,10 +16,20 @@ import {
   Snackbar,
   useTheme,
   useMediaQuery,
+  TextField,
+  MenuItem,
+  InputAdornment,
+  Chip,
+  IconButton,
 } from '@mui/material';
 import {
   Add as AddIcon,
   Delete as DeleteIcon,
+  Search as SearchIcon,
+  FilterList as FilterIcon,
+  Clear as ClearIcon,
+  Download as DownloadIcon,
+  Receipt as ReceiptIcon,
 } from '@mui/icons-material';
 import ExpenseForm from '../components/ExpenseForm.jsx';
 import ExpenseList from '../components/ExpenseList.jsx';
@@ -28,7 +38,7 @@ import { useExpenses } from '../hooks/useExpenses.jsx';
 const ExpensesPage = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-  
+
   const {
     expenses,
     loading,
@@ -44,6 +54,11 @@ const ExpensesPage = () => {
   const [selectedExpense, setSelectedExpense] = useState(null);
   const [formMode, setFormMode] = useState('create');
   const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
+
+  // Filtros
+  const [searchTerm, setSearchTerm] = useState('');
+  const [categoryFilter, setCategoryFilter] = useState('all');
+  const [sortBy, setSortBy] = useState('date-desc');
 
   const showSnackbar = (message, severity = 'success') => {
     setSnackbar({ open: true, message, severity });
@@ -71,12 +86,12 @@ const ExpensesPage = () => {
       if (formMode === 'create') {
         result = await createExpense(expenseData);
         if (result.success) {
-          showSnackbar('💰 Gasto creado exitosamente');
+          showSnackbar('Gasto creado exitosamente');
         }
       } else {
         result = await updateExpense(selectedExpense.id, expenseData);
         if (result.success) {
-          showSnackbar('✏️ Gasto actualizado exitosamente');
+          showSnackbar('Gasto actualizado exitosamente');
         }
       }
 
@@ -101,7 +116,7 @@ const ExpensesPage = () => {
     try {
       const result = await deleteExpense(selectedExpense.id);
       if (result.success) {
-        showSnackbar('🗑️ Gasto eliminado exitosamente');
+        showSnackbar('Gasto eliminado exitosamente');
       } else {
         showSnackbar(result.error, 'error');
       }
@@ -119,23 +134,187 @@ const ExpensesPage = () => {
   };
 
   const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('es-ES', {
+    return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'EUR',
+      currency: 'USD',
     }).format(amount);
+  };
+
+  // Obtener categorías únicas
+  const categories = useMemo(() => {
+    const cats = [...new Set(expenses.map(exp => exp.category))];
+    return cats.sort();
+  }, [expenses]);
+
+  // Filtrar y ordenar gastos
+  const filteredExpenses = useMemo(() => {
+    let filtered = expenses.filter(exp => {
+      const matchesSearch = exp.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                           exp.category.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesCategory = categoryFilter === 'all' || exp.category === categoryFilter;
+      return matchesSearch && matchesCategory;
+    });
+
+    // Ordenar
+    filtered.sort((a, b) => {
+      switch (sortBy) {
+        case 'date-desc':
+          return b.date.toDate() - a.date.toDate();
+        case 'date-asc':
+          return a.date.toDate() - b.date.toDate();
+        case 'amount-desc':
+          return b.amount - a.amount;
+        case 'amount-asc':
+          return a.amount - b.amount;
+        default:
+          return 0;
+      }
+    });
+
+    return filtered;
+  }, [expenses, searchTerm, categoryFilter, sortBy]);
+
+  const handleClearFilters = () => {
+    setSearchTerm('');
+    setCategoryFilter('all');
+    setSortBy('date-desc');
+  };
+
+  const hasActiveFilters = searchTerm !== '' || categoryFilter !== 'all' || sortBy !== 'date-desc';
+
+  // Exportar a CSV
+  const handleExportCSV = () => {
+    const csvContent = [
+      ['Fecha', 'Descripción', 'Categoría', 'Monto'].join(','),
+      ...filteredExpenses.map(exp =>
+        [
+          exp.date.toDate().toLocaleDateString(),
+          `"${exp.description}"`,
+          exp.category,
+          exp.amount
+        ].join(',')
+      )
+    ].join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `gastos_${new Date().toISOString().split('T')[0]}.csv`;
+    link.click();
+    showSnackbar('Datos exportados exitosamente');
   };
 
   return (
     <Container maxWidth="lg" sx={{ py: 3 }}>
       {/* Header */}
       <Box mb={4}>
-        <Typography variant="h4" component="h1" fontWeight={700} gutterBottom>
-          💰 Mis Gastos
-        </Typography>
-        <Typography variant="body1" color="text.secondary">
-          Gestiona y controla todos tus gastos de forma inteligente
-        </Typography>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 2 }}>
+          <Box>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 1 }}>
+              <ReceiptIcon sx={{ fontSize: 40, color: theme.palette.primary.main }} />
+              <Typography variant="h4" component="h1" fontWeight={700}>
+                Mis Gastos
+              </Typography>
+            </Box>
+            <Typography variant="body1" color="text.secondary">
+              Gestiona y controla todos tus gastos de forma inteligente
+            </Typography>
+          </Box>
+          <Button
+            variant="outlined"
+            startIcon={<DownloadIcon />}
+            onClick={handleExportCSV}
+            disabled={filteredExpenses.length === 0}
+          >
+            Exportar CSV
+          </Button>
+        </Box>
       </Box>
+
+      {/* Filtros */}
+      <Card sx={{ mb: 3, p: 2 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
+          <FilterIcon color="primary" />
+          <Typography variant="h6" fontWeight="600">
+            Filtros
+          </Typography>
+          {hasActiveFilters && (
+            <Chip
+              label="Filtros activos"
+              size="small"
+              color="primary"
+              onDelete={handleClearFilters}
+              deleteIcon={<ClearIcon />}
+            />
+          )}
+        </Box>
+
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={6} md={4}>
+            <TextField
+              fullWidth
+              label="Buscar"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder="Descripción o categoría..."
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SearchIcon />
+                  </InputAdornment>
+                ),
+                endAdornment: searchTerm && (
+                  <InputAdornment position="end">
+                    <IconButton size="small" onClick={() => setSearchTerm('')}>
+                      <ClearIcon fontSize="small" />
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </Grid>
+
+          <Grid item xs={12} sm={6} md={4}>
+            <TextField
+              fullWidth
+              select
+              label="Categoría"
+              value={categoryFilter}
+              onChange={(e) => setCategoryFilter(e.target.value)}
+            >
+              <MenuItem value="all">Todas las categorías</MenuItem>
+              {categories.map((cat) => (
+                <MenuItem key={cat} value={cat}>
+                  {cat}
+                </MenuItem>
+              ))}
+            </TextField>
+          </Grid>
+
+          <Grid item xs={12} sm={6} md={4}>
+            <TextField
+              fullWidth
+              select
+              label="Ordenar por"
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+            >
+              <MenuItem value="date-desc">Fecha (más reciente)</MenuItem>
+              <MenuItem value="date-asc">Fecha (más antigua)</MenuItem>
+              <MenuItem value="amount-desc">Monto (mayor a menor)</MenuItem>
+              <MenuItem value="amount-asc">Monto (menor a mayor)</MenuItem>
+            </TextField>
+          </Grid>
+        </Grid>
+
+        {hasActiveFilters && (
+          <Box sx={{ mt: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Typography variant="body2" color="text.secondary">
+              Mostrando {filteredExpenses.length} de {expenses.length} gasto{expenses.length !== 1 ? 's' : ''}
+            </Typography>
+          </Box>
+        )}
+      </Card>
 
       {/* Estadísticas rápidas */}
       {stats && (
@@ -203,7 +382,7 @@ const ExpensesPage = () => {
 
       {/* Lista de gastos */}
       <ExpenseList
-        expenses={expenses}
+        expenses={filteredExpenses}
         onEdit={handleEdit}
         onDelete={handleDeleteClick}
         loading={loading}
