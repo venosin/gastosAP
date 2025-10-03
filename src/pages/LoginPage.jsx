@@ -22,6 +22,8 @@ import {
   Login as LoginIcon,
 } from '@mui/icons-material';
 import { useAuth } from '../hooks/useAuth.jsx';
+import { motion } from 'framer-motion';
+import ParticlesBackground from '../components/ParticlesBackground.jsx';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
@@ -70,7 +72,7 @@ const LoginPage = () => {
       sx={{
         minHeight: '100vh',
         width: '100vw',
-        background: 'linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%)',
+        background: 'linear-gradient(135deg, #0A0A0A 0%, #121212 100%)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -83,7 +85,7 @@ const LoginPage = () => {
           left: 0,
           right: 0,
           bottom: 0,
-          background: 'radial-gradient(circle at 20% 50%, rgba(108, 47, 255, 0.1) 0%, transparent 50%)',
+          background: 'radial-gradient(circle at 20% 50%, rgba(255, 77, 77, 0.15) 0%, transparent 50%)',
         },
         '&::after': {
           content: '""',
@@ -92,10 +94,11 @@ const LoginPage = () => {
           left: 0,
           right: 0,
           bottom: 0,
-          background: 'radial-gradient(circle at 80% 80%, rgba(0, 184, 255, 0.1) 0%, transparent 50%)',
+          background: 'radial-gradient(circle at 80% 80%, rgba(0, 206, 209, 0.15) 0%, transparent 50%)',
         },
       }}
     >
+      <ParticlesBackground />
       <Box
         sx={{
           position: 'relative',

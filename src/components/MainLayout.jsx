@@ -39,6 +39,7 @@ import {
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth.jsx';
 import { motion } from 'framer-motion';
+import ParticlesBackground from './ParticlesBackground.jsx';
 
 const DRAWER_WIDTH = 280;
 
@@ -154,7 +155,10 @@ const MainLayout = ({ children }) => {
   );
 
   return (
-    <Box sx={{ display: 'flex', minHeight: '100vh', width: '100%' }}>
+    <Box sx={{ display: 'flex', minHeight: '100vh', width: '100%', position: 'relative' }}>
+      {/* Particles Background */}
+      <ParticlesBackground />
+
       {/* Sidebar para desktop */}
       {!isMobile && (
         <Drawer
