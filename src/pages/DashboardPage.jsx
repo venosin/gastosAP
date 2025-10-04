@@ -206,9 +206,17 @@ const DashboardPage = () => {
       }}
     >
       {/* Header */}
-      <Box sx={{ mb: 4 }}>
+      <Box
+        component={motion.div}
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        sx={{ mb: 4 }}
+      >
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 1 }}>
           <Box
+            component={motion.div}
+            whileHover={{ scale: 1.1, rotate: 5 }}
             sx={{
               width: 48,
               height: 48,
@@ -421,9 +429,26 @@ const DashboardPage = () => {
 
           {/* Presupuesto (si está configurado) */}
           {budget > 0 && (
-            <Card sx={{ mb: { xs: 3, md: 4 }, p: 3 }}>
+            <Card
+              component={motion.div}
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: 0.5 }}
+              sx={{
+                mb: { xs: 3, md: 4 },
+                p: 3,
+                border: `1px solid ${theme.palette.primary.main}20`,
+                transition: 'all 0.3s',
+                '&:hover': {
+                  borderColor: `${theme.palette.primary.main}50`,
+                  boxShadow: `0 8px 24px ${theme.palette.primary.main}30`,
+                },
+              }}
+            >
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
-                <PiggyBank size={28} color={theme.palette.primary.main} />
+                <motion.div whileHover={{ scale: 1.2, rotate: 10 }}>
+                  <PiggyBank size={28} color={theme.palette.primary.main} />
+                </motion.div>
                 <Typography variant="h6" fontWeight="600">
                   Presupuesto Mensual
                 </Typography>
@@ -509,11 +534,21 @@ const DashboardPage = () => {
             {/* Gráfica principal */}
             <Grid item xs={12} lg={7}>
               <Card
+                component={motion.div}
+                initial={{ opacity: 0, x: -30 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6, delay: 0.6 }}
                 sx={{
                   p: { xs: 2, md: 3 },
                   height: { xs: 300, md: 400 },
                   display: 'flex',
-                  flexDirection: 'column'
+                  flexDirection: 'column',
+                  border: `1px solid ${theme.palette.divider}`,
+                  transition: 'all 0.3s',
+                  '&:hover': {
+                    borderColor: theme.palette.primary.main,
+                    boxShadow: `0 8px 24px ${theme.palette.primary.main}20`,
+                  },
                 }}
               >
                 <Typography variant="h6" gutterBottom fontWeight="600">
@@ -562,11 +597,21 @@ const DashboardPage = () => {
             {/* Gráfica de categorías */}
             <Grid item xs={12} lg={5}>
               <Card
+                component={motion.div}
+                initial={{ opacity: 0, x: 30 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6, delay: 0.7 }}
                 sx={{
                   p: { xs: 2, md: 3 },
                   height: { xs: 300, md: 400 },
                   display: 'flex',
-                  flexDirection: 'column'
+                  flexDirection: 'column',
+                  border: `1px solid ${theme.palette.divider}`,
+                  transition: 'all 0.3s',
+                  '&:hover': {
+                    borderColor: theme.palette.secondary.main,
+                    boxShadow: `0 8px 24px ${theme.palette.secondary.main}20`,
+                  },
                 }}
               >
                 <Typography variant="h6" gutterBottom fontWeight="600">
@@ -619,10 +664,26 @@ const DashboardPage = () => {
 
             {/* Lista de gastos recientes */}
             <Grid item xs={12}>
-              <Card sx={{ p: { xs: 2, md: 3 } }}>
+              <Card
+                component={motion.div}
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.8 }}
+                sx={{
+                  p: { xs: 2, md: 3 },
+                  border: `1px solid ${theme.palette.divider}`,
+                  transition: 'all 0.3s',
+                  '&:hover': {
+                    borderColor: theme.palette.primary.main,
+                    boxShadow: `0 8px 24px ${theme.palette.primary.main}20`,
+                  },
+                }}
+              >
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                    <Receipt size={28} color={theme.palette.primary.main} />
+                    <motion.div whileHover={{ scale: 1.2, rotate: 10 }}>
+                      <Receipt size={28} color={theme.palette.primary.main} />
+                    </motion.div>
                     <Typography variant="h6" fontWeight="600">
                       Gastos Recientes
                     </Typography>
@@ -720,6 +781,9 @@ const DashboardPage = () => {
       {/* FAB para móvil */}
       {isMobile && (
         <Fab
+          component={motion.button}
+          whileHover={{ scale: 1.1, rotate: 90 }}
+          whileTap={{ scale: 0.9 }}
           color="primary"
           aria-label="add"
           onClick={handleOpenForm}
@@ -728,6 +792,7 @@ const DashboardPage = () => {
             bottom: 16,
             right: 16,
             background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.primary.dark})`,
+            boxShadow: `0 4px 20px ${theme.palette.primary.main}50`,
           }}
         >
           <Plus size={24} />
@@ -738,6 +803,9 @@ const DashboardPage = () => {
       {!isMobile && (
         <Box sx={{ position: 'fixed', bottom: 24, right: 24 }}>
           <Button
+            component={motion.button}
+            whileHover={{ scale: 1.05, y: -2 }}
+            whileTap={{ scale: 0.95 }}
             variant="contained"
             startIcon={<Plus size={20} />}
             size="large"
@@ -747,9 +815,9 @@ const DashboardPage = () => {
               px: 3,
               py: 1.5,
               background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.primary.dark})`,
-              boxShadow: theme.shadows[8],
+              boxShadow: `0 4px 20px ${theme.palette.primary.main}50`,
               '&:hover': {
-                boxShadow: theme.shadows[12],
+                boxShadow: `0 8px 30px ${theme.palette.primary.main}60`,
               }
             }}
           >

@@ -34,6 +34,7 @@ import {
 import ExpenseForm from '../components/ExpenseForm.jsx';
 import ExpenseList from '../components/ExpenseList.jsx';
 import { useExpenses } from '../hooks/useExpenses.jsx';
+import { motion } from 'framer-motion';
 
 const ExpensesPage = () => {
   const theme = useTheme();
@@ -207,11 +208,19 @@ const ExpensesPage = () => {
   return (
     <Container maxWidth="lg" sx={{ py: 3 }}>
       {/* Header */}
-      <Box mb={4}>
+      <Box
+        component={motion.div}
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        mb={4}
+      >
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 2 }}>
           <Box>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 1 }}>
-              <ReceiptIcon sx={{ fontSize: 40, color: theme.palette.primary.main }} />
+              <motion.div whileHover={{ scale: 1.1, rotate: 5 }}>
+                <ReceiptIcon sx={{ fontSize: 40, color: theme.palette.primary.main }} />
+              </motion.div>
               <Typography variant="h4" component="h1" fontWeight={700}>
                 Mis Gastos
               </Typography>
@@ -221,6 +230,9 @@ const ExpensesPage = () => {
             </Typography>
           </Box>
           <Button
+            component={motion.button}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
             variant="outlined"
             startIcon={<DownloadIcon />}
             onClick={handleExportCSV}
@@ -232,9 +244,26 @@ const ExpensesPage = () => {
       </Box>
 
       {/* Filtros */}
-      <Card sx={{ mb: 3, p: 2 }}>
+      <Card
+        component={motion.div}
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.5, delay: 0.1 }}
+        sx={{
+          mb: 3,
+          p: 2,
+          border: `1px solid ${theme.palette.divider}`,
+          transition: 'all 0.3s',
+          '&:hover': {
+            borderColor: theme.palette.primary.main,
+            boxShadow: `0 4px 16px ${theme.palette.primary.main}20`,
+          },
+        }}
+      >
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
-          <FilterIcon color="primary" />
+          <motion.div whileHover={{ scale: 1.2, rotate: 180 }}>
+            <FilterIcon color="primary" />
+          </motion.div>
           <Typography variant="h6" fontWeight="600">
             Filtros
           </Typography>
@@ -320,7 +349,21 @@ const ExpensesPage = () => {
       {stats && (
         <Grid container spacing={3} mb={4}>
           <Grid item xs={12} sm={6} md={3}>
-            <Card>
+            <Card
+              component={motion.div}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              sx={{
+                border: `1px solid ${theme.palette.error.main}30`,
+                transition: 'all 0.3s',
+                '&:hover': {
+                  transform: 'translateY(-4px)',
+                  borderColor: theme.palette.error.main,
+                  boxShadow: `0 8px 24px ${theme.palette.error.main}30`,
+                },
+              }}
+            >
               <CardContent sx={{ textAlign: 'center' }}>
                 <Typography variant="h6" color="error.main" fontWeight={700}>
                   {formatCurrency(stats.total)}
@@ -331,9 +374,23 @@ const ExpensesPage = () => {
               </CardContent>
             </Card>
           </Grid>
-          
+
           <Grid item xs={12} sm={6} md={3}>
-            <Card>
+            <Card
+              component={motion.div}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+              sx={{
+                border: `1px solid ${theme.palette.primary.main}30`,
+                transition: 'all 0.3s',
+                '&:hover': {
+                  transform: 'translateY(-4px)',
+                  borderColor: theme.palette.primary.main,
+                  boxShadow: `0 8px 24px ${theme.palette.primary.main}30`,
+                },
+              }}
+            >
               <CardContent sx={{ textAlign: 'center' }}>
                 <Typography variant="h6" color="primary.main" fontWeight={700}>
                   {stats.count}
@@ -346,7 +403,21 @@ const ExpensesPage = () => {
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
-            <Card>
+            <Card
+              component={motion.div}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+              sx={{
+                border: `1px solid ${theme.palette.warning.main}30`,
+                transition: 'all 0.3s',
+                '&:hover': {
+                  transform: 'translateY(-4px)',
+                  borderColor: theme.palette.warning.main,
+                  boxShadow: `0 8px 24px ${theme.palette.warning.main}30`,
+                },
+              }}
+            >
               <CardContent sx={{ textAlign: 'center' }}>
                 <Typography variant="h6" color="warning.main" fontWeight={700}>
                   {formatCurrency(stats.monthlyTotal)}
@@ -359,7 +430,21 @@ const ExpensesPage = () => {
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
-            <Card>
+            <Card
+              component={motion.div}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.5 }}
+              sx={{
+                border: `1px solid ${theme.palette.info.main}30`,
+                transition: 'all 0.3s',
+                '&:hover': {
+                  transform: 'translateY(-4px)',
+                  borderColor: theme.palette.info.main,
+                  boxShadow: `0 8px 24px ${theme.palette.info.main}30`,
+                },
+              }}
+            >
               <CardContent sx={{ textAlign: 'center' }}>
                 <Typography variant="h6" color="info.main" fontWeight={700}>
                   {formatCurrency(stats.dailyAverage)}
@@ -390,6 +475,9 @@ const ExpensesPage = () => {
 
       {/* Botón flotante para agregar */}
       <Fab
+        component={motion.button}
+        whileHover={{ scale: 1.1, rotate: 90 }}
+        whileTap={{ scale: 0.9 }}
         color="primary"
         aria-label="add expense"
         onClick={() => handleOpenForm('create')}
@@ -398,6 +486,8 @@ const ExpensesPage = () => {
           bottom: isMobile ? 16 : 32,
           right: isMobile ? 16 : 32,
           zIndex: 1000,
+          background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.primary.dark})`,
+          boxShadow: `0 4px 20px ${theme.palette.primary.main}50`,
         }}
       >
         <AddIcon />

@@ -34,6 +34,8 @@ import {
 import { useExpenses } from '../hooks/useExpenses.jsx';
 import { startOfMonth, endOfMonth, startOfYear, format } from 'date-fns';
 import { colors } from '../utils/theme.js';
+import { motion } from 'framer-motion';
+import { BarChart3 } from 'lucide-react';
 
 const StatisticsPage = () => {
   const theme = useTheme();
@@ -114,10 +116,33 @@ const StatisticsPage = () => {
   return (
     <Container maxWidth="xl" sx={{ py: 4 }}>
       {/* Header */}
-      <Box mb={4}>
-        <Typography variant="h4" component="h1" fontWeight={700} gutterBottom>
-          Estadísticas
-        </Typography>
+      <Box
+        component={motion.div}
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        mb={4}
+      >
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 1 }}>
+          <Box
+            component={motion.div}
+            whileHover={{ scale: 1.1, rotate: 5 }}
+            sx={{
+              width: 48,
+              height: 48,
+              borderRadius: 2,
+              background: `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <BarChart3 size={28} color="white" />
+          </Box>
+          <Typography variant="h4" component="h1" fontWeight={700}>
+            Estadísticas
+          </Typography>
+        </Box>
         <Typography variant="body1" color="text.secondary">
           Análisis detallado de tus gastos
         </Typography>
@@ -142,7 +167,21 @@ const StatisticsPage = () => {
         <Grid container spacing={3}>
           {/* Resumen de estadísticas */}
           <Grid item xs={12} sm={6} md={3}>
-            <Card>
+            <Card
+              component={motion.div}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              sx={{
+                border: `1px solid ${theme.palette.primary.main}30`,
+                transition: 'all 0.3s',
+                '&:hover': {
+                  transform: 'translateY(-4px)',
+                  borderColor: theme.palette.primary.main,
+                  boxShadow: `0 8px 24px ${theme.palette.primary.main}30`,
+                },
+              }}
+            >
               <CardContent>
                 <Typography variant="body2" color="text.secondary" gutterBottom>
                   Total de Gastos
@@ -155,7 +194,21 @@ const StatisticsPage = () => {
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
-            <Card>
+            <Card
+              component={motion.div}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              sx={{
+                border: `1px solid ${theme.palette.secondary.main}30`,
+                transition: 'all 0.3s',
+                '&:hover': {
+                  transform: 'translateY(-4px)',
+                  borderColor: theme.palette.secondary.main,
+                  boxShadow: `0 8px 24px ${theme.palette.secondary.main}30`,
+                },
+              }}
+            >
               <CardContent>
                 <Typography variant="body2" color="text.secondary" gutterBottom>
                   Cantidad de Gastos
@@ -168,7 +221,21 @@ const StatisticsPage = () => {
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
-            <Card>
+            <Card
+              component={motion.div}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+              sx={{
+                border: `1px solid ${theme.palette.warning.main}30`,
+                transition: 'all 0.3s',
+                '&:hover': {
+                  transform: 'translateY(-4px)',
+                  borderColor: theme.palette.warning.main,
+                  boxShadow: `0 8px 24px ${theme.palette.warning.main}30`,
+                },
+              }}
+            >
               <CardContent>
                 <Typography variant="body2" color="text.secondary" gutterBottom>
                   Promedio por Gasto
@@ -181,7 +248,21 @@ const StatisticsPage = () => {
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
-            <Card>
+            <Card
+              component={motion.div}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+              sx={{
+                border: `1px solid ${theme.palette.error.main}30`,
+                transition: 'all 0.3s',
+                '&:hover': {
+                  transform: 'translateY(-4px)',
+                  borderColor: theme.palette.error.main,
+                  boxShadow: `0 8px 24px ${theme.palette.error.main}30`,
+                },
+              }}
+            >
               <CardContent>
                 <Typography variant="body2" color="text.secondary" gutterBottom>
                   Gasto Mensual
@@ -195,7 +276,22 @@ const StatisticsPage = () => {
 
           {/* Gráfica de gastos mensuales */}
           <Grid item xs={12} lg={8}>
-            <Card sx={{ p: 2, height: 400 }}>
+            <Card
+              component={motion.div}
+              initial={{ opacity: 0, x: -30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.5 }}
+              sx={{
+                p: 2,
+                height: 400,
+                border: `1px solid ${theme.palette.divider}`,
+                transition: 'all 0.3s',
+                '&:hover': {
+                  borderColor: theme.palette.primary.main,
+                  boxShadow: `0 8px 24px ${theme.palette.primary.main}20`,
+                },
+              }}
+            >
               <Typography variant="h6" gutterBottom fontWeight="600">
                 Gastos Mensuales (Año Actual)
               </Typography>
@@ -228,7 +324,22 @@ const StatisticsPage = () => {
 
           {/* Gráfica de gastos por día de la semana */}
           <Grid item xs={12} lg={4}>
-            <Card sx={{ p: 2, height: 400 }}>
+            <Card
+              component={motion.div}
+              initial={{ opacity: 0, x: 30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.6 }}
+              sx={{
+                p: 2,
+                height: 400,
+                border: `1px solid ${theme.palette.divider}`,
+                transition: 'all 0.3s',
+                '&:hover': {
+                  borderColor: theme.palette.secondary.main,
+                  boxShadow: `0 8px 24px ${theme.palette.secondary.main}20`,
+                },
+              }}
+            >
               <Typography variant="h6" gutterBottom fontWeight="600">
                 Promedio por Día
               </Typography>
@@ -310,6 +421,11 @@ const StatisticsPage = () => {
               <Box sx={{ mt: 2 }}>
                 {categoryData.map((category, index) => (
                   <Box
+                    component={motion.div}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.4, delay: index * 0.1 }}
+                    whileHover={{ scale: 1.02, x: 5 }}
                     key={category.name}
                     sx={{
                       mb: 2,
@@ -317,6 +433,12 @@ const StatisticsPage = () => {
                       borderRadius: 2,
                       backgroundColor: theme.palette.action.hover,
                       borderLeft: `4px solid ${COLORS[index % COLORS.length]}`,
+                      cursor: 'pointer',
+                      transition: 'all 0.3s',
+                      '&:hover': {
+                        backgroundColor: theme.palette.action.selected,
+                        boxShadow: `0 4px 12px ${COLORS[index % COLORS.length]}30`,
+                      },
                     }}
                   >
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>

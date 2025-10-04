@@ -111,13 +111,17 @@ const LoginPage = () => {
         <Slide direction="up" in={true} mountOnEnter unmountOnExit>
           <Paper
             elevation={24}
+            component={motion.div}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
             sx={{
               padding: 4,
-              background: 'rgba(18, 23, 46, 0.8)',
+              background: 'rgba(18, 18, 18, 0.8)',
               backdropFilter: 'blur(20px)',
-              border: `1px solid rgba(108, 47, 255, 0.2)`,
+              border: `1px solid rgba(255, 77, 77, 0.2)`,
               borderRadius: 4,
-              boxShadow: '0 8px 32px rgba(108, 47, 255, 0.2)',
+              boxShadow: '0 8px 32px rgba(255, 77, 77, 0.2)',
             }}
           >
             <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', mb: 3 }}>
@@ -189,10 +193,18 @@ const LoginPage = () => {
                 size="large"
                 startIcon={<LoginIcon />}
                 disabled={loading}
+                component={motion.button}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
                 sx={{
                   mb: 2,
                   py: 1.5,
                   fontSize: '1.1rem',
+                  background: 'linear-gradient(135deg, #FF4D4D 0%, #00CED1 100%)',
+                  boxShadow: '0 4px 16px rgba(255, 77, 77, 0.3)',
+                  '&:hover': {
+                    boxShadow: '0 8px 24px rgba(255, 77, 77, 0.5)',
+                  },
                 }}
               >
                 {loading ? 'Iniciando sesión...' : 'Iniciar Sesión'}
@@ -211,12 +223,18 @@ const LoginPage = () => {
                 startIcon={<GoogleIcon />}
                 onClick={handleGoogleLogin}
                 disabled={loading}
-                sx={{ 
+                component={motion.button}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                sx={{
                   mb: 3,
                   py: 1.5,
                   borderWidth: 2,
+                  borderColor: '#FF4D4D',
                   '&:hover': {
                     borderWidth: 2,
+                    borderColor: '#FF4D4D',
+                    background: 'rgba(255, 77, 77, 0.1)',
                   }
                 }}
               >
